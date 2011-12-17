@@ -41,10 +41,16 @@ public class PiirivIntsRedaktor {
     	// saadakse tagasi (vist) roo toString() tulem refereeritud entity asemel ja vastav attribuut s2testatakse nulliks. 
     	
     	if(valvurIntsidendis != null && valvurIntsidendis.getKirjeldus() != null && !valvurIntsidendis.getKirjeldus().trim().equals("")) { // good enuff
-    		boolean isUpdate = true;
-    		Piirivalvur_intsidendis newValvurIntsidendis = (Piirivalvur_intsidendis) valvurIntsidendis.updateDeleteHistoricalEntity(isUpdate);
-    		mapSeadusEntities(newValvurIntsidendis);
-    		return "redirect:/intsidentedit/edit/" + newValvurIntsidendis.getIntsident().getIntsident_ID();
+    		Piirivalvur_intsidendis pviAttatchedEntity = Piirivalvur_intsidendis.findPiirivalvur_intsidendis(piirivalvurIntsidendisId);
+    		if(!(
+    			pviAttatchedEntity.getKirjeldus().equals(command.getKirjeldus()) && // Values changed
+    			pviAttatchedEntity.getKommentaar().equals(command.getKommentaar())))
+    		{
+    			boolean isUpdate = true;
+    			Piirivalvur_intsidendis newValvurIntsidendis = (Piirivalvur_intsidendis) valvurIntsidendis.updateDeleteHistoricalEntity(isUpdate);
+    			mapSeadusEntities(newValvurIntsidendis);
+    			return "redirect:/intsidentedit/edit/" + newValvurIntsidendis.getIntsident().getIntsident_ID();
+    		}
     	}
     	
     	return "redirect:/piirivintsredaktor/edit/" + piirivalvurIntsidendisId;
